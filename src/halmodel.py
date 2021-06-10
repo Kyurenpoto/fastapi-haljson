@@ -26,16 +26,16 @@ class HALBase(BaseModel):
     )
 
     @classmethod
-    def from_apis(cls, routes: dict[str, str]) -> HALBase:
+    def from_routes(cls, routes: dict[str, str]) -> HALBase:
         return HALBase(links={rel: HALLink(href=api) for rel, api in routes.items()})
 
     @classmethod
-    def from_apis_with_requested(cls, routes: dict[str, str], requested: str, http_method) -> HALBase:
+    def from_routes_with_requested(cls, routes: dict[str, str], requested: str, http_method) -> HALBase:
         return HALBase(
             links={
                 "self": HALLink(href=routes[requested]),
                 "profile": HALLink.doc_link(requested, routes[requested], http_method, "/docs#default/"),
                 "profile2": HALLink.doc_link(requested, routes[requested], http_method, "/redoc#operation/"),
-                **HALBase.from_apis(routes).links,
+                **HALBase.from_routes(routes).links,
             }
         )
